@@ -2,10 +2,10 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Data Nilai</h1>
+            <h1>Data Sub Kriteria</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard') }}">Dashboard</a></div>
-                <div class="breadcrumb-item">Data Nilai</div>
+                <div class="breadcrumb-item">Data Sub Kriteria</div>
             </div>
         </div>
         <div class="section-body">
@@ -13,15 +13,44 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <a href="{{ route('admin.nilai.create') }}" class="btn btn-sm btn-primary mb-3"><i
+                            <form action="" method="get">
+                                <div class='form-group row mb-3'>
+                                    <div class="col-md-10">
+                                        <label for='kriteria_id' class='mb-2'>Krieria</label>
+                                        <select name="kriteria_id" id="kriteria_id" class="form-control">
+                                            <option value="" selected>Semua</option>
+                                            @foreach ($data_kriteria as $kriteria)
+                                                <option value="{{ $kriteria->id }}">{{ $kriteria->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('kriteria_id')
+                                            <div class='invalid-feedback'>
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md align-self-end">
+                                        <button class="btn py-2 btn-block btn-secondary">Filter</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <a href="{{ route('admin.sub-kriteria.create') }}" class="btn btn-sm btn-primary mb-3"><i
                                     class="fas fa-plus"></i> Tambah Data</a>
                             <table class="table table-striped table-hover" id="dTable">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Nilai</th>
+                                        <th>Kriteria</th>
                                         <th>Nama</th>
-                                        <th>Deskripsi</th>
+                                        <th>Keterangan</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -29,16 +58,17 @@
                                     @foreach ($items as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->nilai }}</td>
+                                            <td>{{ $item->kriteria->nama }}</td>
                                             <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->deskripsi }}</td>
+                                            <td>{{ $item->keterangan }}</td>
                                             <td>
-                                                <a href="{{ route('admin.nilai.edit', $item->id) }}"
+                                                <a href="{{ route('admin.sub-kriteria.edit', $item->uuid) }}"
                                                     class="btn btn-sm btn-info"><i class="fas fa-edit"></i> Edit</a>
                                                 <form action="" method="post" class="d-inline" id="formDelete">
                                                     @csrf
                                                     @method('delete')
-                                                    <button data-action="{{ route('admin.nilai.destroy', $item->id) }}"
+                                                    <button
+                                                        data-action="{{ route('admin.sub-kriteria.destroy', $item->uuid) }}"
                                                         class="btn btn-sm btn-danger btnDelete"><i class="fas fa-trash"></i>
                                                         Hapus</button>
                                                 </form>

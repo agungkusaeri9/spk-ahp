@@ -2,10 +2,10 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Data User</h1>
+            <h1>Data Nilai</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard') }}">Dashboard</a></div>
-                <div class="breadcrumb-item">Data User</div>
+                <div class="breadcrumb-item">Data Nilai</div>
             </div>
         </div>
         <div class="section-body">
@@ -13,17 +13,14 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <a href="{{ route('admin.users.create') }}" class="btn btn-sm btn-primary mb-3"><i
+                            <a href="{{ route('admin.nilai.create') }}" class="btn btn-sm btn-primary mb-3"><i
                                     class="fas fa-plus"></i> Tambah Data</a>
                             <table class="table table-striped table-hover" id="dTable">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Avatar</th>
+                                        <th>Nilai</th>
                                         <th>Nama</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -31,21 +28,15 @@
                                     @foreach ($items as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $item->nilai }}</td>
+                                            <td>{{ $item->nama }}</td>
                                             <td>
-                                                <img src="{{ $item->avatar() }}" class="img-fluid rounded-circle"
-                                                    style="max-height: 60px" alt="">
-                                            </td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->username }}</td>
-                                            <td>{{ $item->email }}</td>
-                                            <td>{!! $item->status() !!}</td>
-                                            <td>
-                                                <a href="{{ route('admin.users.edit', $item->id) }}"
+                                                <a href="{{ route('admin.nilai.edit', $item->id) }}"
                                                     class="btn btn-sm btn-info"><i class="fas fa-edit"></i> Edit</a>
                                                 <form action="" method="post" class="d-inline" id="formDelete">
                                                     @csrf
                                                     @method('delete')
-                                                    <button data-action="{{ route('admin.users.destroy', $item->id) }}"
+                                                    <button data-action="{{ route('admin.nilai.destroy', $item->id) }}"
                                                         class="btn btn-sm btn-danger btnDelete"><i class="fas fa-trash"></i>
                                                         Hapus</button>
                                                 </form>

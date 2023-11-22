@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Nilai;
+use App\Models\SkalaNilai;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -16,8 +17,8 @@ class NilaiController extends Controller
      */
     public function index()
     {
-        $items = Nilai::orderBy('nilai', 'ASC')->get();
-        return view('admin.pages.nilai.index', [
+        $items = SkalaNilai::orderBy('nilai', 'ASC')->get();
+        return view('admin.pages.skala-nilai.index', [
             'title' => 'Data Nilai',
             'items' => $items
         ]);
@@ -30,7 +31,7 @@ class NilaiController extends Controller
      */
     public function create()
     {
-        return view('admin.pages.nilai.create', [
+        return view('admin.pages.skala-nilai.create', [
             'title' => 'Tambah Nilai'
         ]);
     }
@@ -44,13 +45,12 @@ class NilaiController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'nilai' => ['required', 'unique:nilai,nilai'],
-            'nama' => ['required', 'unique:nilai,nama'],
-            'deskripsi' => ['required']
+            'nilai' => ['required', 'unique:skala_nilai,nilai'],
+            'nama' => ['required', 'unique:skala_nilai,nama'],
         ]);
 
         $data = request()->all();
-        Nilai::create($data);
+        SkalaNilai::create($data);
         return redirect()->route('admin.nilai.index')->with('success', 'Nilai berhasil ditambahkan.');
     }
 
@@ -73,8 +73,8 @@ class NilaiController extends Controller
      */
     public function edit($id)
     {
-        $item = Nilai::where('id', $id)->firstOrFail();
-        return view('admin.pages.nilai.edit', [
+        $item = SkalaNilai::where('id', $id)->firstOrFail();
+        return view('admin.pages.skala-nilai.edit', [
             'title' => 'Edit Nilai',
             'item' => $item
         ]);
@@ -90,11 +90,10 @@ class NilaiController extends Controller
     public function update(Request $request, $id)
     {
         $data = request()->all();
-        $item = Nilai::where('id', $id)->firstOrFail();
+        $item = SkalaNilai::where('id', $id)->firstOrFail();
         request()->validate([
-            'nilai' => ['required', Rule::unique('nilai')->ignore($item->id)],
-            'nama' => ['required', Rule::unique('nilai')->ignore($item->id)],
-            'deskripsi' => ['required']
+            'nilai' => ['required', Rule::unique('skala_nilai')->ignore($item->id)],
+            'nama' => ['required', Rule::unique('skala_nilai')->ignore($item->id)],
         ]);
         $item->update($data);
         return redirect()->route('admin.nilai.index')->with('success', 'Nilai berhasil diupdate.');
@@ -108,7 +107,7 @@ class NilaiController extends Controller
      */
     public function destroy($id)
     {
-        $item = Nilai::where('id', $id)->firstOrFail();
+        $item = SkalaNilai::where('id', $id)->firstOrFail();
         $item->delete();
         return redirect()->route('admin.nilai.index')->with('success', 'Nilai berhasil dihapus.');
     }
