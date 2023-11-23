@@ -2,10 +2,10 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Perbandingan Matrik</h1>
+            <h1>Alternatif Kriteria</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard') }}">Dashboard</a></div>
-                <div class="breadcrumb-item">Perbandingan Matrik</div>
+                <div class="breadcrumb-item">Alternatif Kriteria</div>
             </div>
         </div>
         <div class="section-body">
@@ -13,6 +13,8 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
+                            <a href="{{ route('admin.alternatif.create') }}" class="btn btn-sm btn-primary mb-3"><i
+                                    class="fas fa-plus"></i> Tambah Data</a>
                             <table class="table table-striped table-hover" id="dTable">
                                 <thead>
                                     <tr>
@@ -23,15 +25,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($data_kriteria as $item)
+                                    @foreach ($data_alternatif as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->kode }}</td>
                                             <td>{{ $item->nama }}</td>
                                             <td>
-                                                <a href="{{ route('admin.perbandingan-sub-kriteria.detail', $item->uuid) }}"
-                                                    class="btn btn-sm btn-info"><i class="fas fa-info"></i> Pilih
-                                                    Kriteria</a>
+                                                @if ($item->alternatif_kriteria->count() > 0)
+                                                    <a href="{{ route('admin.alternatif-kriteria.edit', $item->uuid) }}"
+                                                        class="btn btn-sm btn-info"><i class="fas fa-edit"></i> Edit
+                                                        Penilaian</a>
+                                                @else
+                                                    <a href="{{ route('admin.alternatif-kriteria.create', $item->uuid) }}"
+                                                        class="btn btn-sm btn-info"><i class="fas fa-add"></i> Buat
+                                                        Penilaian</a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -54,5 +62,29 @@
     <script src="{{ asset('assets/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('assets/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script>
+        $(function() {
+            $('#dTable').DataTable();
+            $('body').on('click', '.btnDelete', function(e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let action = $(this).data('action');
+                        $('#formDelete').attr('action', action);
+                        $('#formDelete').submit();
+                    }
+                })
+            })
+        })
+    </script>
     @include('admin.layouts.partials.sweetalert')
 @endpush

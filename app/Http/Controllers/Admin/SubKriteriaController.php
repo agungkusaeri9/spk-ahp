@@ -37,7 +37,7 @@ class SubKriteriaController extends Controller
      */
     public function create()
     {
-        $data_kriteria = Kriteria::orderBy('nama', 'ASC')->get();
+        $data_kriteria = Kriteria::with('subs')->orderBy('nama', 'ASC')->get();
         return view('admin.pages.sub-kriteria.create', [
             'title' => 'Tambah Sub Kriteria',
             'data_kriteria' => $data_kriteria
@@ -70,9 +70,23 @@ class SubKriteriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getByKriteriaId()
     {
-        //
+        if (request()->json()) {
+            $kriteria_id = request('kriteria_id');
+            $items = SubKriteria::with('kriteria')->where('kriteria_id', $kriteria_id)->orderBy('nama', 'ASC')->get();
+            if ($items->count() > 0) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $items
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'data' => []
+                ]);
+            }
+        }
     }
 
     /**

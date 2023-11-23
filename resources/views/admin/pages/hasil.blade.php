@@ -2,10 +2,10 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Perbandingan Matrik</h1>
+            <h1>Hasil</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard') }}">Dashboard</a></div>
-                <div class="breadcrumb-item">Perbandingan Matrik</div>
+                <div class="breadcrumb-item">Hasil</div>
             </div>
         </div>
         <div class="section-body">
@@ -13,25 +13,42 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <table class="table table-striped table-hover" id="dTable">
+                            <table class="table table-hover" id="dTable">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
-                                        <th>Kode</th>
                                         <th>Nama</th>
-                                        <th>Aksi</th>
+                                        <th>Nilai Kriteria</th>
+                                        <th class="text-center">Ranking</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($data_kriteria as $item)
+                                    @foreach ($data_alternatif as $item => $group)
+                                        {{-- {{ dd($group) }} --}}
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->kode }}</td>
-                                            <td>{{ $item->nama }}</td>
+                                            <td class="align-middle text-left">{{ $group->first()->alternatif->nama }}
+                                            </td>
                                             <td>
-                                                <a href="{{ route('admin.perbandingan-sub-kriteria.detail', $item->uuid) }}"
-                                                    class="btn btn-sm btn-info"><i class="fas fa-info"></i> Pilih
-                                                    Kriteria</a>
+                                                <table class="table">
+                                                    @foreach ($data_kriteria as $kriteria)
+                                                        <tr>
+                                                            <td>{{ $kriteria->nama }}</td>
+                                                            <td>
+
+                                                                {{ getNilaiKriteria($group->first()->alternatif->id, $kriteria->id) }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                    <tr class=" bg-secondary">
+                                                        <th>Total</th>
+                                                        <th>
+                                                            {{ totalNilaiKriteria($group->first()->alternatif->id) }}</th>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                {{ getRanking($group->first()->alternatif->id) }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -55,4 +72,9 @@
     <script src="{{ asset('assets/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('assets/sweetalert2/sweetalert2.min.js') }}"></script>
     @include('admin.layouts.partials.sweetalert')
+    <script>
+        $(function() {
+            $('#dTable').DataTable();
+        })
+    </script>
 @endpush

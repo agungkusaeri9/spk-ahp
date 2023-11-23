@@ -9,6 +9,12 @@
         <ul class="sidebar-menu">
             <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="fas fa-fire"></i>
                     <span>Dashboard</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ route('admin.alternatif-kriteria.index') }}"><i
+                        class="fas fa-folder"></i>
+                    <span>Alternatif Kriteria</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ route('admin.hasil.index') }}"><i
+                        class="fas fa-folder"></i>
+                    <span>Hasil Perankingan</span></a></li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link has-dropdown"><i class="far fa-folder"></i>
                     <span>Matrik Perbandingan</span></a>

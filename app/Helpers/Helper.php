@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Alternatif;
+use App\Models\AlternatifKriteria;
 use App\Models\Kriteria;
 use App\Models\PerbandinganKriteria;
 use App\Models\PerbandinganSubKriteria;
@@ -201,7 +203,7 @@ function getJumlahNormalisasiBarisSubKriteria($kriteria_id, $sub_kriteria1_id)
 
 function getPrioritasNormalisasiBarisSubKriteria($kriteria_id, $sub_kriteria1_id)
 {
-    $data_sub_kriteria = SubKriteria::where('kriteria_id', $kriteria_id)->orderBy('nama', 'ASC')->get();
+    $data_sub_kriteria = SubKriteria::where('kriteria_id', $kriteria_id)->get();
     $total_kriteria = $data_sub_kriteria->count();
     $jumlah = 0;
     foreach ($data_sub_kriteria as $sub_kriteria2) {
@@ -228,7 +230,7 @@ function getPrioritasSubKriteriaNormalisasiBarisSubKriteria($kriteria_id, $sub_k
 function getNilaiMaksimumPrioritasSubKriteria($kriteria_id)
 {
     $kriteria = Kriteria::findOrFail($kriteria_id);
-    $data_sub_kriteria = SubKriteria::where('kriteria_id', $kriteria_id)->orderBy('nama', 'ASC')->get();
+    $data_sub_kriteria = SubKriteria::where('kriteria_id', $kriteria_id)->get();
     $maximum_value = 0; // Inisialisasi nilai maksimum
     foreach ($data_sub_kriteria as $sub_kriteria1) {
         $nilai_normalisasi = getPrioritasSubKriteriaNormalisasiBarisSubKriteria($kriteria->id, $sub_kriteria1->id);
@@ -246,4 +248,138 @@ function getPriotitasSubKriteria($kriteria_id, $sub_kriteria1_id)
 
     $hasil = $prioritas / $nilai_maksimum;
     return number_format($hasil, 3);
+}
+
+
+function getNilaiPenjumlahanBarisSubKriteria($kriteria_id, $sub_kriteria1_id, $sub_kriteria2_id, $prioritas_sub_kriteria2_id)
+{
+    $prioritas = getPrioritasNormalisasiBarisSubKriteria($kriteria_id, $prioritas_sub_kriteria2_id);
+    $perbandingan_kriteria = PerbandinganSubKriteria::where([
+        'kriteria_id' => $kriteria_id,
+        'sub_kriteria1_id' => $sub_kriteria1_id,
+        'sub_kriteria2_id' => $sub_kriteria2_id
+    ])->first();
+
+    $hasil = $perbandingan_kriteria->nilai * $prioritas;
+    return number_format($hasil, 3);
+}
+
+
+function hitungJumlahMatrikPenjumlahanSubKriteriaSetiapBaris($kriteria_id, $sub_kriteria1_id)
+{
+    $data_sub_kriteria = SubKriteria::where('kriteria_id', $kriteria_id)->get();
+    $jumlah = 0;
+    foreach ($data_sub_kriteria as $sub_kriteria2) {
+        $jumlah = $jumlah + getNilaiPenjumlahanBarisSubKriteria($kriteria_id, $sub_kriteria1_id, $sub_kriteria2->id, $sub_kriteria2->id);
+    }
+    return $jumlah;
+}
+
+function getHasilPerhitunganRasioSubKriteria($kriteria_id, $sub_kriteria1_id)
+{
+    $jumlah_perbaris = hitungJumlahMatrikPenjumlahanSubKriteriaSetiapBaris($kriteria_id, $sub_kriteria1_id);
+    $prioritas = getPrioritasNormalisasiBarisSubKriteria($kriteria_id, $sub_kriteria1_id);
+    $hasil = $jumlah_perbaris + $prioritas;
+    return number_format($hasil, 3);
+}
+
+
+
+function getTotalHasilRasioKonsistensiSubKriteria($kriteria_id)
+{
+    $data_sub_kriteria = SubKriteria::where('kriteria_id', $kriteria_id)->get();
+    $hasil = 0;
+    foreach ($data_sub_kriteria as $sub_kriteria1) {
+        $jumlah_perbaris = hitungJumlahMatrikPenjumlahanSubKriteriaSetiapBaris($kriteria_id, $sub_kriteria1->id);
+        $prioritas = getPrioritasNormalisasiBarisSubKriteria($kriteria_id, $sub_kriteria1->id);
+        $hasil += $jumlah_perbaris + $prioritas;
+    }
+    return number_format($hasil, 3);
+}
+
+function getLamdaMaxRasioKonsistensiSubKriteria($kriteria_id)
+{
+    $jumlah_kriteria = Kriteria::count();
+    $total_hasil_rasio_konsistensi = getTotalHasilRasioKonsistensiSubKriteria($kriteria_id);
+
+    $hasil = $total_hasil_rasio_konsistensi / $jumlah_kriteria;
+    return number_format($hasil, 3);
+}
+
+function getCiRasioKonsistensiSubKriteria($kriteria_id)
+{
+    $lamda_max = getLamdaMaxRasioKonsistensiSubKriteria($kriteria_id);
+    $jumlah_kriteria = SubKriteria::where('kriteria_id', $kriteria_id)->count();
+
+    $hasil = ($lamda_max - $jumlah_kriteria) / ($jumlah_kriteria - 1);
+    return number_format($hasil, 3);
+}
+
+
+function getCrRasioKonsistensiSubKriteria($kriteria_id)
+{
+    $jumlah_kriteria = SubKriteria::where('kriteria_id', $kriteria_id)->count();
+    $ci = getCiRasioKonsistensiSubKriteria($kriteria_id);
+    $ri = getIr($jumlah_kriteria);
+
+    $hasil = $ci / $ri;
+    return number_format($hasil, 3);
+}
+
+
+function getNilaiKriteria($alternatif_id, $kriteria_id)
+{
+    $prioritas = getPrioritasNormalisasiBaris($kriteria_id);
+    $alternatifKriteria = AlternatifKriteria::where([
+        'alternatif_id' => $alternatif_id,
+        'kriteria_id' => $kriteria_id
+    ])->first();
+
+    $prioritas_sub_kriteria = getPriotitasSubKriteria($kriteria_id, $alternatifKriteria->sub_kriteria->id);
+
+    $hasil = $prioritas * $prioritas_sub_kriteria;
+    return number_format($hasil, 3);
+}
+
+function totalNilaiKriteria($alternatif_id)
+{
+    $data_kriteria = Kriteria::get();
+    $jumlah = 0;
+    foreach ($data_kriteria as $kriteria) {
+        $prioritas = getPrioritasNormalisasiBaris($kriteria->id);
+        $alternatifKriteria = AlternatifKriteria::where([
+            'alternatif_id' => $alternatif_id,
+            'kriteria_id' => $kriteria->id
+        ])->first();
+        $prioritas_sub_kriteria = getPriotitasSubKriteria($kriteria->id, $alternatifKriteria->sub_kriteria->id);
+        $jumlah += $prioritas * $prioritas_sub_kriteria;
+    }
+
+    return number_format($jumlah, 3);
+}
+
+function getRanking($alternatif_id)
+{
+    // Mendapatkan total nilai kriteria untuk alternatif tertentu
+    $total_nilai = totalNilaiKriteria($alternatif_id);
+
+    // Mengambil semua alternatif
+    $data_alternatif = Alternatif::get();
+
+    // Inisialisasi variabel peringkat
+    $peringkat = 1;
+
+    // Menghitung peringkat untuk alternatif tertentu
+    foreach ($data_alternatif as $alternatif) {
+        if ($alternatif->id != $alternatif_id) {
+            $nilai_alternatif = totalNilaiKriteria($alternatif->id);
+
+            if ($nilai_alternatif > $total_nilai) {
+                $peringkat++;
+            }
+        }
+    }
+
+    // Mengembalikan peringkat
+    return $peringkat;
 }

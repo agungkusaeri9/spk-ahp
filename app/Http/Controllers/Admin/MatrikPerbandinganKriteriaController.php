@@ -38,7 +38,7 @@ class MatrikPerbandinganKriteriaController extends Controller
             }
         }
 
-        return redirect()->route('admin.normalisasi-kriteria')->with('success', 'Berhasil membandingkan!');
+        return redirect()->route('admin.normalisasi-kriteria')->with('success', 'Berhasil Menghitung.');
         // DB::beginTransaction();
         // try {
         //     $data_kriteria1 = $request->input('kriteria1');

@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\AlternatifController;
+use App\Http\Controllers\Admin\AlternatifKriteriaController;
 use App\Http\Controllers\Admin\ChangePasswordController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\HasilController;
 use App\Http\Controllers\Admin\KriteriaController;
 use App\Http\Controllers\Admin\MatrikPerbandinganKriteriaController;
 use App\Http\Controllers\Admin\MatrikPerbandinganSubKriteriaController;
@@ -23,6 +25,7 @@ Route::resource('kriteria', KriteriaController::class)->except('show');
 Route::resource('alternatif', AlternatifController::class)->except('show');
 Route::resource('nilai', NilaiController::class)->except('show');
 Route::resource('sub-kriteria', SubKriteriaController::class)->except('show');
+Route::get('/sub-kriteria/getByKriteria', [SubKriteriaController::class, 'getByKriteriaId'])->name('sub-kriteria.getByKriteriaId');
 
 // perbandingan kriteria
 Route::get('/perbandingan-kriteria', [MatrikPerbandinganKriteriaController::class, 'index'])->name('perbandingan-kriteria.index');
@@ -35,3 +38,13 @@ Route::get('/perbandingan-sub-kriteria', [MatrikPerbandinganSubKriteriaControlle
 Route::get('/perbandingan-sub-kriteria/{uuid}/detail', [MatrikPerbandinganSubKriteriaController::class, 'detail'])->name('perbandingan-sub-kriteria.detail');
 Route::post('/perbandingan-sub-kriteria/{kriteria_uuid}', [MatrikPerbandinganSubKriteriaController::class, 'hitung'])->name('perbandingan-sub-kriteria.hitung');
 Route::get('/normalisasi-sub-kriteria/{uuid}', [MatrikPerbandinganSubKriteriaController::class, 'normalisasi'])->name('normalisasi-sub-kriteria');
+
+Route::get('alternatif-kriteria', [AlternatifKriteriaController::class, 'index'])->name('alternatif-kriteria.index');
+
+Route::get('alternatif-kriteria/{alternatif_uuid}/create', [AlternatifKriteriaController::class, 'create'])->name('alternatif-kriteria.create');
+Route::post('alternatif-kriteria/{alternatif_uuid}/create', [AlternatifKriteriaController::class, 'store'])->name('alternatif-kriteria.store');
+
+Route::get('alternatif-kriteria/{alternatif_uuid}/edit', [AlternatifKriteriaController::class, 'edit'])->name('alternatif-kriteria.edit');
+Route::patch('alternatif-kriteria/{alternatif_uuid}/edit', [AlternatifKriteriaController::class, 'update'])->name('alternatif-kriteria.update');
+
+Route::get('hasil', [HasilController::class, 'index'])->name('hasil.index');

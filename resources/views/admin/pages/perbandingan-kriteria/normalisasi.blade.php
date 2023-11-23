@@ -175,8 +175,10 @@
                                                 @if (getCrRasioKonsistensi() <= 0.1)
                                                     <p>
                                                         Karena Nilai CR <= 0,1, maka perhitungannya KONSISTEN dan bisa
-                                                            dilanjutkan ke tahap selanjutnya. </p> <a href=""
-                                                                class="btn btn-info">Lanjutkan</a>
+                                                            dilanjutkan ke tahap selanjutnya. </p> <a
+                                                                href="{{ route('admin.perbandingan-sub-kriteria.index') }}"
+                                                                class="btn btn-info">Lanjutkan Ke Perbandingan Sub
+                                                                Kriteria</a>
                                                         @else
                                                             <p> Karena Nilai CR> 0,1 maka
                                                                 perbandingan Berpasangan Harus diulangi lagi sehingga

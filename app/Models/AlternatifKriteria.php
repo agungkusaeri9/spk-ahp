@@ -5,19 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Alternatif extends Model
+class AlternatifKriteria extends Model
 {
     use HasFactory;
-    protected $table = 'alternatif';
+    protected $table = 'alternatif_kriteria';
     protected $guarded = ['id'];
 
     public function alternatif()
     {
         return $this->belongsTo(Alternatif::class);
     }
-
-    public function alternatif_kriteria()
+    public function kriteria()
     {
-        return $this->hasMany(AlternatifKriteria::class);
+        return $this->belongsTo(Kriteria::class);
+    }
+    public function sub_kriteria()
+    {
+        return $this->belongsTo(SubKriteria::class);
     }
 }

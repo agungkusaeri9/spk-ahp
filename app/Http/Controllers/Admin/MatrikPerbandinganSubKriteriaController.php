@@ -24,7 +24,7 @@ class MatrikPerbandinganSubKriteriaController extends Controller
     public function detail($kriteria_uuid)
     {
         $kriteria = Kriteria::where('uuid', $kriteria_uuid)->firstOrFail();
-        $data_sub_kriteria = SubKriteria::where('kriteria_id', $kriteria->id)->orderBy('nama', 'ASC')->get();
+        $data_sub_kriteria = SubKriteria::where('kriteria_id', $kriteria->id)->get();
         $data_skala = SkalaNilai::orderBy('nilai', 'ASC')->get();
         return view('admin.pages.perbandingan-sub-kriteria.detail', [
             'title' => 'Matrik Perbandingan Kriteria Berpasangan',
@@ -49,7 +49,7 @@ class MatrikPerbandinganSubKriteriaController extends Controller
         }
 
 
-        return redirect()->route('admin.normalisasi-sub-kriteria', $kriteria->uuid)->with('success', 'Berhasil membandingkan!');
+        return redirect()->route('admin.normalisasi-sub-kriteria', $kriteria->uuid)->with('success', 'Berhasil Menghitung');
         // DB::beginTransaction();
         // try {
         //     $data_kriteria1 = $request->input('kriteria1');
@@ -117,7 +117,7 @@ class MatrikPerbandinganSubKriteriaController extends Controller
         $kriteria = Kriteria::where('uuid', $kriteria_uuid)->firstOrFail();
         $data_sub_kriteria = SubKriteria::whereHas('kriteria', function ($q) use ($kriteria_uuid) {
             $q->where('uuid', $kriteria_uuid);
-        })->orderBy('nama', 'ASC')->get();
+        })->get();
         return view('admin.pages.perbandingan-sub-kriteria.normalisasi', [
             'title' => 'Matrik Perbandingan Kriteria Berpasangan',
             'data_sub_kriteria' => $data_sub_kriteria,

@@ -2,7 +2,7 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Matrik Nilai Sub Kriteria (Normalisasi)</h1>
+            <h1>Matrik Nilai Sub Kriteria (Normalisasi) - {{ $kriteria->nama }}</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard') }}">Dashboard</a></div>
                 <div class="breadcrumb-item">Matrik Nilai Sub Kriteria (Normalisasi)</div>
@@ -71,7 +71,7 @@
                     </div>
                 </div>
             </div>
-            {{-- <div class="row">
+            <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
@@ -83,7 +83,7 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Kriteria</th>
+                                            <th>Sub Kriteria</th>
                                             @foreach ($data_sub_kriteria as $sub_kriteria)
                                                 <th>{{ $sub_kriteria->nama }}</th>
                                             @endforeach
@@ -98,14 +98,14 @@
                                                     <td>
                                                         <input type="text" class="form-control inputNumber"
                                                             min="0" step="0.001" required
-                                                            value="{{ getNilaiPenjumlahanBaris($sub_kriteria1->id, $sub_kriteria2->id, $sub_kriteria2->id) }}"
+                                                            value="{{ getNilaiPenjumlahanBarisSubKriteria($kriteria->id, $sub_kriteria1->id, $sub_kriteria2->id, $sub_kriteria2->id) }}"
                                                             readonly>
                                                     </td>
                                                 @endforeach
                                                 <td>
                                                     <input type="text" class="form-control" min="0" step="0.001"
                                                         required
-                                                        value="{{ hitungJumlahMatrikPenjumlahanSetiapBaris($sub_kriteria1->id) }}"
+                                                        value="{{ hitungJumlahMatrikPenjumlahanSubKriteriaSetiapBaris($kriteria->id, $sub_kriteria1->id) }}"
                                                         id="jumlah" readonly>
                                                 </td>
                                             </tr>
@@ -116,8 +116,8 @@
                         </div>
                     </div>
                 </div>
-            </div> --}}
-            {{-- <div class="row">
+            </div>
+            <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
@@ -129,7 +129,7 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Kriteria</th>
+                                            <th>Sub Kriteria</th>
                                             <th>Jumlah Per Baris</th>
                                             <th>Prioritas</th>
                                             <th>Hasil</th>
@@ -142,19 +142,19 @@
                                                 <td>
                                                     <input type="text" class="form-control" min="0" step="0.001"
                                                         required
-                                                        value="{{ hitungJumlahMatrikPenjumlahanSetiapBaris($sub_kriteria1->id) }}"
+                                                        value="{{ hitungJumlahMatrikPenjumlahanSubKriteriaSetiapBaris($kriteria->id, $sub_kriteria1->id) }}"
                                                         id="jumlah" readonly>
                                                 </td>
                                                 <td>
                                                     <input type="text" class="form-control" min="0" step="0.001"
                                                         required
-                                                        value="{{ getPrioritasNormalisasiBaris($sub_kriteria1->id) }}"
+                                                        value="{{ getPrioritasNormalisasiBarisSubKriteria($kriteria->id, $sub_kriteria1->id) }}"
                                                         id="jumlah" readonly>
                                                 </td>
                                                 <td>
                                                     <input type="text" class="form-control" min="0" step="0.001"
                                                         required
-                                                        value="{{ getHasilPerhitunganRasioKriteria($sub_kriteria1->id) }}"
+                                                        value="{{ getHasilPerhitunganRasioSubKriteria($kriteria->id, $sub_kriteria1->id) }}"
                                                         id="jumlah" readonly>
                                                 </td>
                                             </tr>
@@ -164,29 +164,30 @@
                                         <tr>
                                             <th>Total Hasil</th>
                                             <td> : </td>
-                                            <td>{{ getTotalHasilRasioKonsistensi() }}</td>
+                                            <td>{{ getTotalHasilRasioKonsistensiSubKriteria($kriteria->id) }}</td>
                                         </tr>
                                         <tr>
                                             <th>Lamda Max</th>
                                             <td> : </td>
-                                            <td>{{ getLamdaMaxRasioKonsistensi() }}</td>
+                                            <td>{{ getLamdaMaxRasioKonsistensiSubKriteria($kriteria->id) }}</td>
                                         </tr>
                                         <tr>
                                             <th>CI</th>
                                             <td> : </td>
-                                            <td>{{ getCiRasioKonsistensi() }}</td>
+                                            <td>{{ getCiRasioKonsistensiSubKriteria($kriteria->id) }}</td>
                                         </tr>
                                         <tr>
                                             <th>CR</th>
                                             <td> : </td>
-                                            <td>{{ getCrRasioKonsistensi() }}</td>
+                                            <td>{{ getCrRasioKonsistensiSubKriteria($kriteria->id) }}</td>
                                         </tr>
                                         <tr>
                                             <th>
-                                                @if (getCrRasioKonsistensi() <= 0.1)
+                                                @if (getCrRasioKonsistensiSubKriteria($kriteria->id) <= 0.1)
                                                     <p>
                                                         Karena Nilai CR <= 0,1, maka perhitungannya KONSISTEN dan bisa
-                                                            dilanjutkan ke tahap selanjutnya. </p> <a href=""
+                                                            dilanjutkan ke tahap selanjutnya. </p> <a
+                                                                href="{{ route('admin.perbandingan-sub-kriteria.index') }}"
                                                                 class="btn btn-info">Lanjutkan</a>
                                                         @else
                                                             <p> Karena Nilai CR> 0,1 maka
@@ -206,7 +207,7 @@
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
         </div>
     </section>
 @endsection
