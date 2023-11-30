@@ -84,7 +84,8 @@ function getPrioritasNormalisasiBaris($kriteria1_id)
     }
 
     $prioritas = $jumlah / $total_kriteria;
-    return number_format($prioritas, 3);
+    // return number_format($prioritas, 3);
+    return $prioritas;
 }
 
 function getNilaiPenjumlahanBaris($kriteria1_id, $kriteria2_id, $prioritas_kriteria1_id)
@@ -96,7 +97,8 @@ function getNilaiPenjumlahanBaris($kriteria1_id, $kriteria2_id, $prioritas_krite
     ])->first();
 
     $hasil = $perbandingan_kriteria->nilai * $prioritas;
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 function hitungJumlahMatrikPenjumlahanSetiapBaris($kriteria1_id)
@@ -114,7 +116,8 @@ function getHasilPerhitunganRasioKriteria($kriteria1_id)
     $jumlah_perbaris = hitungJumlahMatrikPenjumlahanSetiapBaris($kriteria1_id);
     $prioritas = getPrioritasNormalisasiBaris($kriteria1_id);
     $hasil = $jumlah_perbaris + $prioritas;
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 
@@ -127,7 +130,8 @@ function getTotalHasilRasioKonsistensi()
         $prioritas = getPrioritasNormalisasiBaris($kriteria1->id);
         $hasil = $hasil + $jumlah_perbaris + $prioritas;
     }
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 function getLamdaMaxRasioKonsistensi()
@@ -136,7 +140,8 @@ function getLamdaMaxRasioKonsistensi()
     $total_hasil_rasio_konsistensi = getTotalHasilRasioKonsistensi();
 
     $hasil = $total_hasil_rasio_konsistensi / $jumlah_kriteria;
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 function getCiRasioKonsistensi()
@@ -145,7 +150,8 @@ function getCiRasioKonsistensi()
     $jumlah_kriteria = Kriteria::count();
 
     $hasil = ($lamda_max - $jumlah_kriteria) / ($jumlah_kriteria - 1);
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 
@@ -156,7 +162,8 @@ function getCrRasioKonsistensi()
     $ri = getIr($jumlah_kriteria);
 
     $hasil = $ci / $ri;
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 
@@ -211,7 +218,8 @@ function getPrioritasNormalisasiBarisSubKriteria($kriteria_id, $sub_kriteria1_id
     }
 
     $prioritas = $jumlah / $total_kriteria;
-    return number_format($prioritas, 3);
+    // return number_format($prioritas, 3);
+    return $prioritas;
 }
 
 function getPrioritasSubKriteriaNormalisasiBarisSubKriteria($kriteria_id, $sub_kriteria1_id)
@@ -224,7 +232,8 @@ function getPrioritasSubKriteriaNormalisasiBarisSubKriteria($kriteria_id, $sub_k
     }
 
     $prioritas = $jumlah / $total_kriteria;
-    return number_format($prioritas, 3);
+    // return number_format($prioritas, 3);
+    return $prioritas;
 }
 
 function getNilaiMaksimumPrioritasSubKriteria($kriteria_id)
@@ -238,7 +247,8 @@ function getNilaiMaksimumPrioritasSubKriteria($kriteria_id)
     }
 
     // Jika Anda ingin mengembalikan nilai maksimum, gunakan $maximum_value
-    return number_format($maximum_value, 3);
+    // return number_format($maximum_value, 3);
+    return $maximum_value;
 }
 
 function getPriotitasSubKriteria($kriteria_id, $sub_kriteria1_id)
@@ -247,7 +257,8 @@ function getPriotitasSubKriteria($kriteria_id, $sub_kriteria1_id)
     $nilai_maksimum = getNilaiMaksimumPrioritasSubKriteria($kriteria_id);
 
     $hasil = $prioritas / $nilai_maksimum;
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 
@@ -261,7 +272,8 @@ function getNilaiPenjumlahanBarisSubKriteria($kriteria_id, $sub_kriteria1_id, $s
     ])->first();
 
     $hasil = $perbandingan_kriteria->nilai * $prioritas;
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 
@@ -280,7 +292,8 @@ function getHasilPerhitunganRasioSubKriteria($kriteria_id, $sub_kriteria1_id)
     $jumlah_perbaris = hitungJumlahMatrikPenjumlahanSubKriteriaSetiapBaris($kriteria_id, $sub_kriteria1_id);
     $prioritas = getPrioritasNormalisasiBarisSubKriteria($kriteria_id, $sub_kriteria1_id);
     $hasil = $jumlah_perbaris + $prioritas;
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 
@@ -294,7 +307,8 @@ function getTotalHasilRasioKonsistensiSubKriteria($kriteria_id)
         $prioritas = getPrioritasNormalisasiBarisSubKriteria($kriteria_id, $sub_kriteria1->id);
         $hasil += $jumlah_perbaris + $prioritas;
     }
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 function getLamdaMaxRasioKonsistensiSubKriteria($kriteria_id)
@@ -303,7 +317,8 @@ function getLamdaMaxRasioKonsistensiSubKriteria($kriteria_id)
     $total_hasil_rasio_konsistensi = getTotalHasilRasioKonsistensiSubKriteria($kriteria_id);
 
     $hasil = $total_hasil_rasio_konsistensi / $jumlah_kriteria;
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 function getCiRasioKonsistensiSubKriteria($kriteria_id)
@@ -312,7 +327,8 @@ function getCiRasioKonsistensiSubKriteria($kriteria_id)
     $jumlah_kriteria = SubKriteria::where('kriteria_id', $kriteria_id)->count();
 
     $hasil = ($lamda_max - $jumlah_kriteria) / ($jumlah_kriteria - 1);
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 
@@ -323,7 +339,8 @@ function getCrRasioKonsistensiSubKriteria($kriteria_id)
     $ri = getIr($jumlah_kriteria);
 
     $hasil = $ci / $ri;
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 
@@ -338,7 +355,8 @@ function getNilaiKriteria($alternatif_id, $kriteria_id)
     $prioritas_sub_kriteria = getPriotitasSubKriteria($kriteria_id, $alternatifKriteria->sub_kriteria->id);
 
     $hasil = $prioritas * $prioritas_sub_kriteria;
-    return number_format($hasil, 3);
+    // return number_format($hasil, 3);
+    return $hasil;
 }
 
 function totalNilaiKriteria($alternatif_id)
@@ -355,7 +373,8 @@ function totalNilaiKriteria($alternatif_id)
         $jumlah += $prioritas * $prioritas_sub_kriteria;
     }
 
-    return number_format($jumlah, 3);
+    // return number_format($jumlah, 3);
+    return $jumlah;
 }
 
 function getRanking($alternatif_id)

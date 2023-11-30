@@ -13,39 +13,33 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
+                            <a href="" class="btn btn-danger">Export PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
                             <table class="table table-hover" id="dTable">
                                 <thead>
                                     <tr>
-                                        <th>No.</th>
-                                        <th>Nama</th>
-                                        <th>Nilai Kriteria</th>
+                                        <th>Kode Alternatif</th>
+                                        <th>Nama Alternatif</th>
+                                        <th>Total Nilai</th>
                                         <th class="text-center">Ranking</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($data_alternatif as $item => $group)
-                                        {{-- {{ dd($group) }} --}}
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                            <td class="align-middle text-left">{{ $group->first()->alternatif->kode }}
+                                            </td>
                                             <td class="align-middle text-left">{{ $group->first()->alternatif->nama }}
                                             </td>
                                             <td>
-                                                <table class="table">
-                                                    @foreach ($data_kriteria as $kriteria)
-                                                        <tr>
-                                                            <td>{{ $kriteria->nama }}</td>
-                                                            <td>
-
-                                                                {{ getNilaiKriteria($group->first()->alternatif->id, $kriteria->id) }}
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                    <tr class=" bg-secondary">
-                                                        <th>Total</th>
-                                                        <th>
-                                                            {{ totalNilaiKriteria($group->first()->alternatif->id) }}</th>
-                                                    </tr>
-                                                </table>
+                                                {{ totalNilaiKriteria($group->first()->alternatif->id) }}
                                             </td>
                                             <td class="align-middle text-center">
                                                 {{ getRanking($group->first()->alternatif->id) }}
@@ -74,7 +68,11 @@
     @include('admin.layouts.partials.sweetalert')
     <script>
         $(function() {
-            $('#dTable').DataTable();
+            $('#dTable').DataTable({
+                "order": [
+                    [3, "asc"]
+                ]
+            });
         })
     </script>
 @endpush

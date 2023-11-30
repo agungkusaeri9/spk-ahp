@@ -13,7 +13,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <a href="{{ route('admin.alternatif.create') }}" class="btn btn-sm btn-primary mb-3"><i
+                            <a href="{{ route('admin.alternatif-kriteria.create') }}" class="btn btn-sm btn-primary mb-3"><i
                                     class="fas fa-plus"></i> Tambah Data</a>
                             <table class="table table-striped table-hover" id="dTable">
                                 <thead>

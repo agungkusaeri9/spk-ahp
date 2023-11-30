@@ -41,8 +41,8 @@ Route::get('/normalisasi-sub-kriteria/{uuid}', [MatrikPerbandinganSubKriteriaCon
 
 Route::get('alternatif-kriteria', [AlternatifKriteriaController::class, 'index'])->name('alternatif-kriteria.index');
 
-Route::get('alternatif-kriteria/{alternatif_uuid}/create', [AlternatifKriteriaController::class, 'create'])->name('alternatif-kriteria.create');
-Route::post('alternatif-kriteria/{alternatif_uuid}/create', [AlternatifKriteriaController::class, 'store'])->name('alternatif-kriteria.store');
+Route::get('alternatif-kriteria/create', [AlternatifKriteriaController::class, 'create'])->name('alternatif-kriteria.create');
+Route::post('alternatif-kriteria/create', [AlternatifKriteriaController::class, 'store'])->name('alternatif-kriteria.store');
 
 Route::get('alternatif-kriteria/{alternatif_uuid}/edit', [AlternatifKriteriaController::class, 'edit'])->name('alternatif-kriteria.edit');
 Route::patch('alternatif-kriteria/{alternatif_uuid}/edit', [AlternatifKriteriaController::class, 'update'])->name('alternatif-kriteria.update');

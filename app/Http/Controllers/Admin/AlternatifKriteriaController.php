@@ -15,18 +15,16 @@ class AlternatifKriteriaController extends Controller
     {
         $data_alternatif = Alternatif::with('alternatif_kriteria')->orderBy('nama', 'ASC')->get();
         return view('admin.pages.alternatif-kriteria.index', [
-            'title' => 'Alternatif Kriteria',
+            'title' => 'Penilaian Alternatif',
             'data_alternatif' => $data_alternatif,
         ]);
     }
 
-    public function create($alternatif_uuid)
+    public function create()
     {
         $data_kriteria = Kriteria::orderBy('nama', 'ASC')->get();
-        $alternatif = Alternatif::where('uuid', $alternatif_uuid)->firstOrFail();
         return view('admin.pages.alternatif-kriteria.create', [
-            'title' => 'Alternatif Kriteria',
-            'alternatif' => $alternatif,
+            'title' => 'Penilaian Alternatif',
             'data_kriteria' => $data_kriteria,
         ]);
     }
@@ -34,20 +32,31 @@ class AlternatifKriteriaController extends Controller
 
     public function store()
     {
+        request()->validate([
+            'nama' => ['required', 'unique:alternatif,nama'],
+            'kode' => ['required', 'unique:alternatif,kode']
+        ]);
+
         DB::beginTransaction();
         try {
+
+            // insert alternatif
+            $data_alternatif = request()->only(['nama', 'kode']);
+            $data_alternatif['uuid'] = \Str::uuid();
+            $alternatif = Alternatif::create($data_alternatif);
+
             $data_kriteria = request('kriteria_id');
             $data_sub_kriteria = request('sub_kriteria_id');
             // dd(request()->all());
             foreach ($data_kriteria as $key => $kriteria) {
                 AlternatifKriteria::create([
                     'kriteria_id' => $kriteria,
-                    'alternatif_id' => request('alternatif_id'),
+                    'alternatif_id' => $alternatif->id,
                     'sub_kriteria_id' => $data_sub_kriteria[$key]
                 ]);
             }
             DB::commit();
-            return redirect()->route('admin.alternatif-kriteria.index')->with('success', 'Alternatif Kriteria berhasil dibuat.');
+            return redirect()->route('admin.alternatif-kriteria.index')->with('success', 'Penilaian Alternatif berhasil dibuat.');
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
@@ -61,7 +70,7 @@ class AlternatifKriteriaController extends Controller
             $q->where('uuid', $alternatif_uuid);
         })->get();
         return view('admin.pages.alternatif-kriteria.edit', [
-            'title' => 'Alternatif Kriteria',
+            'title' => 'Penilaian Alternatif',
             'items' => $items,
             'data_kriteria' => $data_kriteria,
         ]);
@@ -85,7 +94,7 @@ class AlternatifKriteriaController extends Controller
                 ]);
             }
             DB::commit();
-            return redirect()->route('admin.alternatif-kriteria.index')->with('success', 'Alternatif Kriteria berhasil diupdate.');
+            return redirect()->route('admin.alternatif-kriteria.index')->with('success', 'Penilaian Alternatif berhasil diupdate.');
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
