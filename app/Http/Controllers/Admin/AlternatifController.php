@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Alternatif;
+use App\Models\Kriteria;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -60,9 +61,37 @@ class AlternatifController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getJson()
     {
-        //
+        if (request()->ajax()) {
+            $data_alternatif = Alternatif::orderBy('nama', 'ASC')->get();
+            $data = $data_alternatif->map(function ($item) {
+                $data_kriteria = Kriteria::orderBy('nama', 'ASC')->get();
+                $mapped_kriteria = $data_kriteria->map(function ($kriteria) use ($item) {
+                    return [
+                        'nama' => $kriteria->nama,
+                        'nilai' => getNilaiKriteria($item->id, $kriteria->id) // Ganti dengan nilai sesuai kebutuhan
+                    ];
+                });
+
+                return [
+                    'nama' => $item->nama,
+                    'data_kriteria' => $mapped_kriteria->all()
+                ];
+            });
+
+            if ($data) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $data
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'data' => []
+                ]);
+            }
+        }
     }
 
     /**

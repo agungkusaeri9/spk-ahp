@@ -402,3 +402,23 @@ function getRanking($alternatif_id)
     // Mengembalikan peringkat
     return $peringkat;
 }
+
+
+function getNilaiByKriteria($kriteria_id)
+{
+    $data_alternatif = Alternatif::orderBy('nama', 'ASC')->get();
+    $data = [];
+
+    $prioritas = getPrioritasNormalisasiBaris($kriteria_id);
+    foreach ($data_alternatif as $alternatif) {
+        $alternatifKriteria = AlternatifKriteria::where([
+            'alternatif_id' => $alternatif->id,
+            'kriteria_id' => $kriteria_id
+        ])->first();
+        $prioritas_sub_kriteria = getPriotitasSubKriteria($kriteria_id, $alternatifKriteria->sub_kriteria->id);
+
+        $hasil = $prioritas * $prioritas_sub_kriteria;
+        array_push($data, $hasil);
+    }
+    return $data;
+}

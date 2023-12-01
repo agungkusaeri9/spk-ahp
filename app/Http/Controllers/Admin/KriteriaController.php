@@ -7,6 +7,8 @@ use App\Models\Kriteria;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
+use function PHPSTORM_META\map;
+
 class KriteriaController extends Controller
 {
     /**
@@ -110,5 +112,31 @@ class KriteriaController extends Controller
         $item = Kriteria::where('uuid', $uuid)->firstOrFail();
         $item->delete();
         return redirect()->route('admin.kriteria.index')->with('success', 'Kriteria berhasil dihapus.');
+    }
+
+    public function getJson()
+    {
+        if (request()->ajax()) {
+            $data_kriteria = Kriteria::orderBy('nama', 'ASC')->get();
+            $data = $data_kriteria->map(function ($item) {
+                $nilai_kriteria = getNilaiByKriteria($item->id);
+                return [
+                    'label' => $item->nama,
+                    'data' => $nilai_kriteria,
+                    'borderWidth' => 1
+                ];
+            });
+            if ($data) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $data
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'data' => []
+                ]);
+            }
+        }
     }
 }

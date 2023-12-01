@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\KriteriaController;
 use App\Http\Controllers\Admin\MatrikPerbandinganKriteriaController;
 use App\Http\Controllers\Admin\MatrikPerbandinganSubKriteriaController;
 use App\Http\Controllers\Admin\NilaiController;
+use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SubKriteriaController;
 use App\Http\Controllers\Admin\UserController;
@@ -48,3 +49,8 @@ Route::get('alternatif-kriteria/{alternatif_uuid}/edit', [AlternatifKriteriaCont
 Route::patch('alternatif-kriteria/{alternatif_uuid}/edit', [AlternatifKriteriaController::class, 'update'])->name('alternatif-kriteria.update');
 
 Route::get('hasil', [HasilController::class, 'index'])->name('hasil.index');
+Route::get('pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
+Route::post('pengaturan', [PengaturanController::class, 'update'])->name('pengaturan.update');
+
+Route::get('/alternatif-json', [AlternatifController::class, 'getJson'])->name('alternatif.getJson');
+Route::get('/kriteria-json', [KriteriaController::class, 'getJson'])->name('kriteria.getJson');

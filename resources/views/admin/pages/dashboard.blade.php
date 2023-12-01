@@ -70,10 +70,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Grafik Hasil Penilaian</h4>
+                        <h4>Grafik Hasil</h4>
                     </div>
                     <div class="card-body">
-                        <canvas id="myChart" height="82"></canvas>
+                        <canvas id="myChart" height="80"></canvas>
                     </div>
                 </div>
             </div>
@@ -83,46 +83,83 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        let getAlternatif = () => {
+            let data = [];
+            $.ajax({
+                url: '{{ route('admin.alternatif.getJson') }}',
+                type: 'GET',
+                async: false,
+                dataType: 'JSON',
+                success: function(response) {
+                    if (response.status == true) {
+                        data = response.data;
+                    }
+
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            })
+            return data;
+        }
+        let getKriteria = () => {
+            let data = [];
+            $.ajax({
+                url: '{{ route('admin.kriteria.getJson') }}',
+                type: 'GET',
+                async: false,
+                dataType: 'JSON',
+                success: function(response) {
+                    if (response.status == true) {
+                        data = response.data;
+                    }
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            })
+            return data;
+        }
+
+        let data_alternatif = getAlternatif();
+        let data_kriteria = getKriteria();
+
+        console.log(data_kriteria);
+
         const ctx = document.getElementById('myChart');
-        var dataSets = [{
-                label: 'IPK',
-                data: [0.12, 0.23, 0.34, 0.634, 0.434, 0.125, 0.457, 0.59],
+        let dataSets = [];
+        let dataSets2 = [];
+
+        data_kriteria.forEach(kriteria => {
+            dataSets.push({
+                label: kriteria.label,
+                data: kriteria.data,
                 borderWidth: 1
-            },
-            {
-                label: 'Tanggungan Orang Tua',
-                data: [0.1232, 0.223, 0.234, 0.36, 0.24, 0.5, 0.7, 0.29],
-                borderWidth: 1
-            },
-            {
-                label: 'Penghasilan Orang Tua',
-                data: [0.12, 0.523, 0.334, 0.96, 0.24, 0.5, 0.27, 0.79],
-                borderWidth: 1
-            },
-            {
-                label: 'Semester',
-                data: [0.62, 0.323, 0.534, 0.296, 0.234, 0.45, 0.227, 0.579],
-                borderWidth: 1
-            },
-        ]
+            });
+        });
 
         // Hitung total data untuk setiap label
-        var totalData = dataSets[0].data.map((value, index) => {
+        let totalData = dataSets[0].data.map((value, index) => {
             return dataSets.reduce((accumulator, dataSet) => accumulator + dataSet.data[index], 0);
         });
 
-        // Tambahkan dataset tambahan untuk total
+        let data_label = data_alternatif.map(function(item) {
+            return item.nama;
+        });
+
+        // Tambahkan dataset untuk total
         dataSets.push({
             label: 'Total',
             data: totalData,
-            borderWidth: 1,
-            type: 'line' // Tipe garis untuk dataset total
+            type: 'line', // Jenis dataset yang ditambahkan
+            fill: false, // Tidak diisi agar menjadi garis
+            borderWidth: 2 // Lebar garis
         });
 
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Agung', 'Deni', 'Acep', 'Tedi', 'Arif', 'Irma', 'Juna', 'Juni'],
+                labels: data_label,
                 datasets: dataSets
             },
             options: {

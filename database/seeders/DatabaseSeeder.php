@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(
             [
                 UserTableSeeder::class,
+                PengaturanSeeder::class,
                 KriteriaSeeder::class,
                 SubKriteriaSeeder::class,
                 SkalaNilaiSeeder::class

@@ -22,32 +22,51 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <table class="table table-hover" id="dTable">
-                                <thead>
-                                    <tr>
-                                        <th>Kode Alternatif</th>
-                                        <th>Nama Alternatif</th>
-                                        <th>Total Nilai</th>
-                                        <th class="text-center">Ranking</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($data_alternatif as $item => $group)
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="dTable">
+                                    <thead>
                                         <tr>
-                                            <td class="align-middle text-left">{{ $group->first()->alternatif->kode }}
-                                            </td>
-                                            <td class="align-middle text-left">{{ $group->first()->alternatif->nama }}
-                                            </td>
-                                            <td>
-                                                {{ totalNilaiKriteria($group->first()->alternatif->id) }}
-                                            </td>
-                                            <td class="align-middle text-center">
-                                                {{ getRanking($group->first()->alternatif->id) }}
-                                            </td>
+                                            <th>Kode Alternatif</th>
+                                            <th>Nama Alternatif</th>
+                                            <th>Total Nilai</th>
+                                            <th class="text-center">Ranking</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($data_alternatif as $item => $group)
+                                            <tr>
+                                                <td class="align-middle text-left">{{ $group->first()->alternatif->kode }}
+                                                </td>
+                                                <td class="align-middle text-left">{{ $group->first()->alternatif->nama }}
+                                                </td>
+                                                <td>
+                                                    {{ totalNilaiKriteria($group->first()->alternatif->id) }}
+                                                    {{-- <table class="table">
+                                                        @foreach ($data_kriteria as $kriteria)
+                                                            <tr>
+                                                                <td>{{ $kriteria->nama }}</td>
+                                                                <td>
+
+                                                                    {{ getNilaiKriteria($group->first()->alternatif->id, $kriteria->id) }}
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                        <tr class=" bg-secondary">
+                                                            <th>Total</th>
+                                                            <th>
+                                                                {{ totalNilaiKriteria($group->first()->alternatif->id) }}
+                                                            </th>
+                                                        </tr>
+                                                    </table> --}}
+                                                </td>
+                                                <td class="align-middle text-center">
+                                                    {{ getRanking($group->first()->alternatif->id) }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

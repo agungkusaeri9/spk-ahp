@@ -57,6 +57,9 @@
                     <li>
                         <a href="{{ route('admin.nilai.index') }}">Nilai</a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.pengaturan.index') }}">Pengaturan Web</a>
+                    </li>
                 </ul>
             </li>
         </ul>
