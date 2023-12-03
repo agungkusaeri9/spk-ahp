@@ -40,6 +40,13 @@
                                                         class="btn btn-sm btn-info"><i class="fas fa-add"></i> Buat
                                                         Penilaian</a>
                                                 @endif
+                                                <form action="{{ route('admin.alternatif-kriteria.destroy', $item->uuid) }}"
+                                                    method="post" class="d-inline">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>
+                                                        Hapus</button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

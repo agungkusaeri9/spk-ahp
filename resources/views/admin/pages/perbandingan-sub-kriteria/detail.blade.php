@@ -31,10 +31,11 @@
                                                 <th>{{ $sub_kriteria1->nama }}</th>
                                                 @foreach ($data_sub_kriteria as $sub_kriteria2)
                                                     <td>
-                                                        <input type="text" class="form-control"
+                                                        <input type="number" class="form-control matrik"
                                                             name="matriks[{{ $sub_kriteria1->id }}][{{ $sub_kriteria2->id }}]"
-                                                            min="0" step="0.001" required
-                                                            value="{{ getNilaiPerbandinganSubKriteria($sub_kriteria1->id, $sub_kriteria2->id) }}">
+                                                            step="0.001" required
+                                                            id="matriks_{{ $sub_kriteria1->id }}_{{ $sub_kriteria2->id }}"
+                                                            @if ($sub_kriteria1->id == $sub_kriteria2->id) readonly value="1" @else value="{{ getNilaiPerbandinganSubKriteria($sub_kriteria1->id, $sub_kriteria2->id) }}" @endif>
                                                     </td>
                                                 @endforeach
                                             </tr>
@@ -63,7 +64,21 @@
     <script src="{{ asset('assets/sweetalert2/sweetalert2.min.js') }}"></script>
     <script>
         $(function() {
-            $('#dTable').DataTable();
+            $('.matrik').on('input', function() {
+                let matrik = $(this).attr('id');
+                let matches = matrik.match(/\d+/g);
+                let baris = parseInt(matches[0]);
+                let kolom = parseInt(matches[1]);
+
+                let barisBaru = kolom;
+                let kolomBaru = baris;
+                let kelasBaru = `#matriks_${barisBaru}_${kolomBaru}`;
+
+                let nilai_pertama = $(this).val();
+                let nilai_kedua = 1 / nilai_pertama;
+                $(kelasBaru).val(nilai_kedua);
+                $(kelasBaru).attr('readonly', 'readonly');
+            })
         })
     </script>
     @include('admin.layouts.partials.sweetalert')

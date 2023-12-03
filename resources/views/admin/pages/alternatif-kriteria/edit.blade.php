@@ -20,14 +20,24 @@
                                 method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
                                 @csrf
                                 @method('patch')
-                                <div class='form-group mb-3'>
-                                    <label for='alternatif' class='mb-2'>Alternatif</label>
-                                    <input type='text' name='alternatif'
-                                        class='form-control @error('alternatif') is-invalid @enderror'
-                                        value='{{ $items->first()->alternatif->kode . ' - ' . $items->first()->alternatif->nama ?? old('alternatif') }}'
-                                        readonly>
-                                    @error('alternatif')
-                                        <div class='invalid-feedback'>
+                                <div class="form-group">
+                                    <label>Kode Alternatif</label>
+                                    <input type="text" class="form-control @error('kode') is-invalid @enderror"
+                                        required="" name="kode"
+                                        value="{{ $items->first()->alternatif->kode ?? old('kode') }}">
+                                    @error('kode')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label>Nama Alternatif</label>
+                                    <input type="text" class="form-control @error('nama') is-invalid @enderror"
+                                        required="" name="nama"
+                                        value="{{ $items->first()->alternatif->nama ?? old('nama') }}">
+                                    @error('nama')
+                                        <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror

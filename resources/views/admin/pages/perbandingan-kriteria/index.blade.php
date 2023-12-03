@@ -26,7 +26,8 @@
                                             @csrf
                                             <input type="text" name="kriteria1[]" value="{{ $kriteria1->id }}" hidden>
                                             <input type="text" name="kriteria2[]" value="{{ $kriteria2->id }}" hidden>
-                                            <tr>
+                                            <tr
+                                                class="@if ($kriteria1->id == $kriteria2->id) bg-danger text-white d-none @endif">
                                                 <td>{{ $kriteria1->kode . '- ' . $kriteria1->nama }}</td>
                                                 <td>{{ $kriteria2->kode . '- ' . $kriteria2->nama }}</td>
                                                 <td>
@@ -82,10 +83,11 @@
                                                 <th>{{ $kriteria1->nama }}</th>
                                                 @foreach ($data_kriteria as $kriteria2)
                                                     <td>
-                                                        <input type="text" class="form-control"
+                                                        <input type="number" class="form-control matrik"
                                                             name="matriks[{{ $kriteria1->id }}][{{ $kriteria2->id }}]"
                                                             min="0" step="0.001" required
-                                                            value="{{ getNilaiPerbandinganKriteria($kriteria1->id, $kriteria2->id) }}">
+                                                            id="matriks_{{ $kriteria1->id }}_{{ $kriteria2->id }}"
+                                                            @if ($kriteria1->id == $kriteria2->id) readonly value="1" @else   value="{{ getNilaiPerbandinganKriteria($kriteria1->id, $kriteria2->id) }}" @endif>
                                                     </td>
                                                 @endforeach
                                             </tr>
@@ -114,25 +116,20 @@
     <script src="{{ asset('assets/sweetalert2/sweetalert2.min.js') }}"></script>
     <script>
         $(function() {
-            $('#dTable').DataTable();
-            $('body').on('click', '.btnDelete', function(e) {
-                e.preventDefault();
+            $('.matrik').on('input', function() {
+                let matrik = $(this).attr('id');
+                let matches = matrik.match(/\d+/g);
+                let baris = parseInt(matches[0]);
+                let kolom = parseInt(matches[1]);
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        let action = $(this).data('action');
-                        $('#formDelete').attr('action', action);
-                        $('#formDelete').submit();
-                    }
-                })
+                let barisBaru = kolom;
+                let kolomBaru = baris;
+                let kelasBaru = `#matriks_${barisBaru}_${kolomBaru}`;
+
+                let nilai_pertama = $(this).val();
+                let nilai_kedua = 1 / nilai_pertama;
+                $(kelasBaru).val(nilai_kedua);
+                $(kelasBaru).attr('readonly', 'readonly');
             })
         })
     </script>

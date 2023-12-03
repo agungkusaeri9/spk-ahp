@@ -47,6 +47,7 @@ Route::post('alternatif-kriteria/create', [AlternatifKriteriaController::class, 
 
 Route::get('alternatif-kriteria/{alternatif_uuid}/edit', [AlternatifKriteriaController::class, 'edit'])->name('alternatif-kriteria.edit');
 Route::patch('alternatif-kriteria/{alternatif_uuid}/edit', [AlternatifKriteriaController::class, 'update'])->name('alternatif-kriteria.update');
+Route::delete('alternatif-kriteria/{alternatif_uuid}/edit', [AlternatifKriteriaController::class, 'destroy'])->name('alternatif-kriteria.destroy');
 
 Route::get('hasil', [HasilController::class, 'index'])->name('hasil.index');
 Route::get('hasil-pdf', [HasilController::class, 'export'])->name('hasil.export');

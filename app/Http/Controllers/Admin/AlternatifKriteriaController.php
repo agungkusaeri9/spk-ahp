@@ -8,6 +8,7 @@ use App\Models\AlternatifKriteria;
 use App\Models\Kriteria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class AlternatifKriteriaController extends Controller
 {
@@ -78,14 +79,20 @@ class AlternatifKriteriaController extends Controller
 
     public function update($alternatif_uuid)
     {
+        $alternatif = Alternatif::where('uuid', $alternatif_uuid)->firstOrFail();
+        request()->validate([
+            'nama' => ['required', Rule::unique('alternatif', 'nama')->ignore($alternatif->id)],
+            'kode' => ['required', Rule::unique('alternatif', 'kode')->ignore($alternatif->id)]
+        ]);
         DB::beginTransaction();
         try {
-
-            $alternatif = Alternatif::where('uuid', $alternatif_uuid)->firstOrFail();
+            $alternatif->update([
+                'kode' => request('kode'),
+                'nama' => request('nama')
+            ]);
             $data_kriteria = request('kriteria_id');
             $data_sub_kriteria = request('sub_kriteria_id');
             $id = request('id');
-            // dd(request()->all());
             foreach ($data_kriteria as $key => $kriteria) {
                 AlternatifKriteria::where('id', $id[$key])->update([
                     'kriteria_id' => $kriteria,
@@ -95,6 +102,21 @@ class AlternatifKriteriaController extends Controller
             }
             DB::commit();
             return redirect()->route('admin.alternatif-kriteria.index')->with('success', 'Penilaian Alternatif berhasil diupdate.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
+
+    public function destroy($alternatif_uuid)
+    {
+        DB::beginTransaction();
+        try {
+
+            $alternatif = Alternatif::where('uuid', $alternatif_uuid)->firstOrFail();
+            $alternatif->delete();
+            DB::commit();
+            return redirect()->route('admin.alternatif-kriteria.index')->with('success', 'Alternatif berhasil dihapus.');
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

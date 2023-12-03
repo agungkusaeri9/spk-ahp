@@ -179,8 +179,6 @@ function getNilaiPerbandinganSubKriteria($sub_kriteria1_id, $sub_kriteria2_id)
 
     if ($nilai) {
         return $nilai->nilai;
-    } else {
-        return 0;
     }
 }
 

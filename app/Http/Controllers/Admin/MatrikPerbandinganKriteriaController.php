@@ -16,11 +16,13 @@ class MatrikPerbandinganKriteriaController extends Controller
     public function index()
     {
         $data_kriteria = Kriteria::orderBy('nama', 'ASC')->get();
-        $data_skala = SkalaNilai::orderBy('nilai', 'ASC')->get();
+        $data_skala1 = SkalaNilai::orderBy('nilai', 'DESC')->get();
+        $data_skala2 = SkalaNilai::orderBy('nilai', 'ASC')->get();
         return view('admin.pages.perbandingan-kriteria.index', [
             'title' => 'Matrik Perbandingan Kriteria Berpasangan',
             'data_kriteria' => $data_kriteria,
-            'data_skala' => $data_skala
+            'data_skala1' => $data_skala1,
+            'data_skala2' => $data_skala2
         ]);
     }
 
