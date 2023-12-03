@@ -49,6 +49,7 @@ Route::get('alternatif-kriteria/{alternatif_uuid}/edit', [AlternatifKriteriaCont
 Route::patch('alternatif-kriteria/{alternatif_uuid}/edit', [AlternatifKriteriaController::class, 'update'])->name('alternatif-kriteria.update');
 
 Route::get('hasil', [HasilController::class, 'index'])->name('hasil.index');
+Route::get('hasil-pdf', [HasilController::class, 'export'])->name('hasil.export');
 Route::get('pengaturan', [PengaturanController::class, 'index'])->name('pengaturan.index');
 Route::post('pengaturan', [PengaturanController::class, 'update'])->name('pengaturan.update');
 

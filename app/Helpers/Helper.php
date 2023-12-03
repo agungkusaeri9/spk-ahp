@@ -3,6 +3,7 @@
 use App\Models\Alternatif;
 use App\Models\AlternatifKriteria;
 use App\Models\Kriteria;
+use App\Models\Pengaturan;
 use App\Models\PerbandinganKriteria;
 use App\Models\PerbandinganSubKriteria;
 use App\Models\SubKriteria;
@@ -379,16 +380,9 @@ function totalNilaiKriteria($alternatif_id)
 
 function getRanking($alternatif_id)
 {
-    // Mendapatkan total nilai kriteria untuk alternatif tertentu
     $total_nilai = totalNilaiKriteria($alternatif_id);
-
-    // Mengambil semua alternatif
     $data_alternatif = Alternatif::get();
-
-    // Inisialisasi variabel peringkat
     $peringkat = 1;
-
-    // Menghitung peringkat untuk alternatif tertentu
     foreach ($data_alternatif as $alternatif) {
         if ($alternatif->id != $alternatif_id) {
             $nilai_alternatif = totalNilaiKriteria($alternatif->id);
@@ -398,10 +392,9 @@ function getRanking($alternatif_id)
             }
         }
     }
-
-    // Mengembalikan peringkat
     return $peringkat;
 }
+
 
 
 function getNilaiByKriteria($kriteria_id)
@@ -421,4 +414,51 @@ function getNilaiByKriteria($kriteria_id)
         array_push($data, $hasil);
     }
     return $data;
+}
+
+function getRankingHasil($jumlah = 1)
+{
+    $data_alternatif = Alternatif::get();
+
+    $rankings = [];
+
+    foreach ($data_alternatif as $targetAlternatif) {
+        $total_nilai_target = totalNilaiKriteria($targetAlternatif->id);
+
+        foreach ($data_alternatif as $alternatif) {
+            if ($alternatif->id != $targetAlternatif->id) {
+                $nilai_alternatif = totalNilaiKriteria($alternatif->id);
+
+                if ($nilai_alternatif > $total_nilai_target) {
+                    $rankings[] = ['target_id' => $targetAlternatif->id, 'alternatif_nama' => $alternatif->nama, 'peringkat' => 1];
+                } elseif ($nilai_alternatif == $total_nilai_target) {
+                    $rankings[] = ['target_id' => $targetAlternatif->id, 'alternatif_nama' => $alternatif->nama, 'peringkat' => 0];
+                }
+            }
+        }
+    }
+
+    // Mengurutkan array berdasarkan peringkat (peringkat terendah lebih baik)
+    usort($rankings, function ($a, $b) {
+        return $a['peringkat'] - $b['peringkat'];
+    });
+
+    // Mengelompokkan hasil peringkat berdasarkan target alternatif
+    $groupedRankings = collect($rankings)->groupBy('target_id');
+
+    // Mengambil dua peringkat teratas untuk setiap target alternatif
+    $topTwoRankings = $groupedRankings->map(function ($group) use ($jumlah) {
+        return $group->take($jumlah)->pluck('alternatif_nama')->all();
+    })->all();
+
+    return $topTwoRankings;
+}
+
+function getKesimpulan()
+{
+    $pengaturan = Pengaturan::first();
+    $jumlah_pemenang = $pengaturan->jumlah_pemenang;
+    $keterangan_kesimpulan = $pengaturan->keterangan_kesimpulan;
+    // $ranking = getRankingHasil(1);
+    return $keterangan_kesimpulan;
 }

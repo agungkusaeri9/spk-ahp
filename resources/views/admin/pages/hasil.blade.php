@@ -13,7 +13,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <a href="" class="btn btn-danger">Export PDF</a>
+                            <a href="{{ route('admin.hasil.export') }}" class="btn btn-danger">Export PDF</a>
                         </div>
                     </div>
                 </div>
@@ -40,7 +40,6 @@
                                                 <td class="align-middle text-left">{{ $group->first()->alternatif->nama }}
                                                 </td>
                                                 <td>
-                                                    {{ totalNilaiKriteria($group->first()->alternatif->id) }}
                                                     {{-- <table class="table">
                                                         @foreach ($data_kriteria as $kriteria)
                                                             <tr>
