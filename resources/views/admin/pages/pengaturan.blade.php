@@ -15,8 +15,9 @@
                 <div class="col-12">
                     <div class="alert alert-info">
                         <strong>Perhatian!</strong>
-                        <p class="">Didalam keterangan kesimpulan, gunakan tanda <> untuk merepresentasikan
-                                pemenangnya.</p>
+                        <p class="">Didalam keterangan kesimpulan, gunakan tanda &lt;alternatif_pemenang&gt; untuk
+                            merepresentasikan
+                            pemenangnya.</p>
                     </div>
                 </div>
                 <div class="col-12 col-md-12">

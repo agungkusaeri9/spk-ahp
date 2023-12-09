@@ -67,7 +67,7 @@
                         </thead>
                         <tbody>
                         <tbody>
-                            @foreach ($data_alternatif as $item => $group)
+                            @foreach ($sortedData as $item => $group)
                                 <tr>
                                     <td class="align-middle text-left">{{ $group->first()->alternatif->kode }}
                                     </td>
@@ -101,8 +101,9 @@
                     </table>
                     <h4>Kesimpulan</h4>
                     <p>
-                        {{ getKesimpulan() }}
+                        {!! $kesimpulan !!}
                     </p>
+
                 </div>
             </div>
         </div>

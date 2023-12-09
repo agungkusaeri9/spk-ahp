@@ -23,9 +23,9 @@ return new class extends Migration
             $table->timestamps();
 
             // Foreign Key Constraints
-            $table->foreign('kriteria1_id')->references('id')->on('kriteria');
-            $table->foreign('kriteria2_id')->references('id')->on('kriteria');
-            $table->foreign('skala_nilai_id')->references('id')->on('skala_nilai');
+            $table->foreign('kriteria1_id')->references('id')->on('kriteria')->onDelete('cascade');
+            $table->foreign('kriteria2_id')->references('id')->on('kriteria')->onDelete('cascade');
+            $table->foreign('skala_nilai_id')->references('id')->on('skala_nilai')->onDelete('cascade');
         });
     }
 

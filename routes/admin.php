@@ -13,6 +13,9 @@ use App\Http\Controllers\Admin\PengaturanController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\SubKriteriaController;
 use App\Http\Controllers\Admin\UserController;
+use App\Models\Alternatif;
+use App\Models\Kriteria;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -56,3 +59,10 @@ Route::post('pengaturan', [PengaturanController::class, 'update'])->name('pengat
 
 Route::get('/alternatif-json', [AlternatifController::class, 'getJson'])->name('alternatif.getJson');
 Route::get('/kriteria-json', [KriteriaController::class, 'getJson'])->name('kriteria.getJson');
+
+// reset
+Route::post('reset', function () {
+    Kriteria::whereNotNull('id')->delete();
+    Alternatif::whereNotNull('id')->delete();
+    return redirect()->route('admin.dashboard')->with('success', 'Data Berhasil di Reset!');
+})->name('reset');

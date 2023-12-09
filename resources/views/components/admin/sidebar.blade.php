@@ -62,6 +62,14 @@
                     </li>
                 </ul>
             </li>
+            <div class="m-3">
+                <form action="{{ route('admin.reset') }}" method="post">
+                    @csrf
+                    <button onclick="return confirm('Apakah anda yakin ingin meriset semua data?')"
+                        class="btn my-3 btn-danger btn-block">Reset
+                        Semua</button>
+                </form>
+            </div>
         </ul>
 
     </aside>

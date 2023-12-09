@@ -8,6 +8,19 @@
                 <div class="breadcrumb-item">Perbandingan Matrik</div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    <strong>Perhatian!</strong>
+                    <p>Skala nilai dapat dilihat dibawah ini!</p>
+                    @foreach ($data_skala2 as $nilai)
+                        <p>
+                            {{ $nilai->nilai }} = {{ $nilai->nama }}
+                        </p>
+                    @endforeach
+                </div>
+            </div>
+        </div>
         <div class="section-body">
             <div class="row">
                 <div class="col-md-12">

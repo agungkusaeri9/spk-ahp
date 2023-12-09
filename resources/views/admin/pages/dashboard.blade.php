@@ -80,7 +80,13 @@
         </div>
     </section>
 @endsection
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/sweetalert2/sweetalert2.all.min.js') }}">
+    <link rel="stylesheet" href="{{ asset('assets/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+@endpush
 @push('scripts')
+    <script src="{{ asset('assets/sweetalert2/sweetalert2.min.js') }}"></script>
+    @include('admin.layouts.partials.sweetalert')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         let getAlternatif = () => {
@@ -123,8 +129,6 @@
 
         let data_alternatif = getAlternatif();
         let data_kriteria = getKriteria();
-
-        console.log(data_kriteria);
 
         const ctx = document.getElementById('myChart');
         let dataSets = [];
