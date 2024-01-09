@@ -74,8 +74,9 @@ class HasilController extends Controller
             'sortedData' => $sortedData,
             'data_kriteria' => $data_kriteria,
             'kesimpulan' => $kesimpulan
-        ]);
+        ])->setPaper('a4', 'landscape');
+        $fileName = 'Hasil-perhitungan-spk-ahp-' . time() . '.pdf';
         // return $pdf->stream();
-        return $pdf->download('Hasil-perhitungan-spk-ahp.pdf');
+        return $pdf->download($fileName);
     }
 }

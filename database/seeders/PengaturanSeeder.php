@@ -19,7 +19,7 @@ class PengaturanSeeder extends Seeder
             'nama_situs' => 'Sistem Pendukung Keputusan Pemilihan Beasiswa',
             'deskripsi' => 'Sistem Pendukung Keputusan Pemilihan Beasiswa berbasis web menggunakan laravel',
             'pembuat' => 'Agung Kusaeri',
-            'keterangan_kesimpulan' => 'Berdasarkan perhitungan menggunakan metode Analytical Hierarchy Process (AHP) pada Sistem Pendukung Keputusan (SPK) untuk pemilihan beasiswa, dapat disimpulkan bahwa pendekatan ini memberikan hasil yang lebih terukur dan objektif. Dengan menetapkan Alternatif <> dan <> sebagai pemenangnya'
+            'keterangan_kesimpulan' => 'Berdasarkan perhitungan menggunakan metode Analytical Hierarchy Process (AHP) pada Sistem Pendukung Keputusan (SPK) untuk pemilihan beasiswa, dapat disimpulkan bahwa pendekatan ini memberikan hasil yang lebih terukur dan objektif. Dengan menetapkan Alternatif <<alternatif_pemenang>> sebagai pemenangnya'
         ]);
     }
 }

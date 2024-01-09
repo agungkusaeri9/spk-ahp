@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan PDF</title>
+    <title>Laporan Hasil Perhitungan</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,28 +17,28 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            /* margin: 20px 0;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            overflow: hidden;
+            overflow: hidden; */
         }
 
         th,
         td {
-            padding: 12px 15px;
+            padding: 5px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border: 1px solid #ddd;
         }
 
-        th {
+        /* th {
             background-color: #4CAF50;
             color: white;
-        }
+        } */
 
-        tr:hover {
+        /* tr:hover {
             background-color: #f5f5f5;
-        }
+        } */
 
         .center {
             text-align: center;
@@ -59,38 +59,34 @@
                     <table class="table table-hover" id="dTable">
                         <thead>
                             <tr>
-                                <th>Kode</th>
-                                <th>Nama</th>
-                                <th>Nilai Kriteria</th>
-                                <th>Ranking</th>
+                                <th class="center" rowspan="2">Kode</th>
+                                <th class="center" rowspan="2">Nama</th>
+                                <th class="center" colspan="{{ $data_kriteria->count() }}">Nilai</th>
+                                <th class="center" rowspan="2">Total</th>
+                                <th class="center" rowspan="2">Ranking</th>
+                            </tr>
+                            <tr>
+
+                                @foreach ($data_kriteria as $kriteria)
+                                    <td class="center">{{ $kriteria->nama }}</td>
+                                @endforeach
                             </tr>
                         </thead>
                         <tbody>
                         <tbody>
                             @foreach ($sortedData as $item => $group)
                                 <tr>
-                                    <td class="align-middle text-left">{{ $group->first()->alternatif->kode }}
+                                    <td class="align-middle text-left center">{{ $group->first()->alternatif->kode }}
                                     </td>
                                     <td class="align-middle text-left">{{ $group->first()->alternatif->nama }}
                                     </td>
+                                    @foreach ($data_kriteria as $kriteria)
+                                        <td>
+                                            {{ getNilaiKriteria($group->first()->alternatif->id, $kriteria->id) }}
+                                        </td>
+                                    @endforeach
                                     <td>
-                                        <table class="table">
-                                            @foreach ($data_kriteria as $kriteria)
-                                                <tr>
-                                                    <td>{{ $kriteria->nama }}</td>
-                                                    <td>
-
-                                                        {{ getNilaiKriteria($group->first()->alternatif->id, $kriteria->id) }}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            <tr class=" bg-secondary">
-                                                <th>Total</th>
-                                                <th>
-                                                    {{ totalNilaiKriteria($group->first()->alternatif->id) }}
-                                                </th>
-                                            </tr>
-                                        </table>
+                                        {{ totalNilaiKriteria($group->first()->alternatif->id) }}
                                     </td>
                                     <td style="text-align:center">
                                         {{ getRanking($group->first()->alternatif->id) }}
